@@ -2,12 +2,31 @@ import time
 import machine, onewire, ds18x20
 from app import secrets
 
-from app.ota_updater import OTAUpdater
+import senko
+import network
 
 
-def download_and_install_update_if_available():
-    o = OTAUpdater('https://github.com/hrysto97/esp-upython', github_src_dir='app', main_dir='app', secrets_file='secrets.py')
-    o.install_update_if_available_after_boot(secrets.WIFI_SSID, secrets.WIFI_PASSWORD)
+def connect_wlan(ssid, password):
+    """Connects build-in WLAN interface to the network.
+    Args:
+        ssid: Service name of Wi-Fi network.
+        password: Password for that Wi-Fi network.
+    Returns:
+        True for success, Exception otherwise.
+    """
+    sta_if = network.WLAN(network.STA_IF)
+    ap_if = network.WLAN(network.AP_IF)
+    sta_if.active(True)
+    ap_if.active(False)
+
+    if not sta_if.isconnected():
+        print("Connecting to WLAN ({})...".format(ssid))
+        sta_if.active(True)
+        sta_if.connect(ssid, password)
+        while not sta_if.isconnected():
+            pass
+
+    return True
 
 
 def print_temp():
@@ -23,7 +42,7 @@ def print_temp():
         for rom in roms:
             print(rom)
             print(ds_sensor.read_temp(rom))
-        time.sleep(5)
+        break
 
 
 def start():
@@ -31,5 +50,13 @@ def start():
 
 
 def boot():
-    download_and_install_update_if_available()
-    start()
+    OTA = senko.Senko(
+        user="hrysto97", repo="esp-upython", files=["main.py"]
+    )
+
+    # Connect to Wi-Fi network.
+    connect_wlan(secrets.WIFI_SSID, secrets.WIFI_PASSWORD)
+
+    if OTA.update():
+        print("Updated to the latest version! Rebooting...")
+        machine.reset()

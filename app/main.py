@@ -34,7 +34,11 @@ def print_temp():
     ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
 
     roms = ds_sensor.scan()
-    print('Found DS devices: ', roms)
+    if roms:
+        print('Found DS devices: ', roms)
+    else:
+        print('No devices found')
+        return
 
     while True:
         ds_sensor.convert_temp()
@@ -42,7 +46,6 @@ def print_temp():
         for rom in roms:
             print(rom)
             print(ds_sensor.read_temp(rom))
-        break
 
 
 def start():

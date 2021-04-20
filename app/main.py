@@ -49,8 +49,7 @@ def print_temp():
 
 
 def start():
-    pass
-    # print_temp()
+    print_temp()
 
 
 def boot():

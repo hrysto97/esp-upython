@@ -32,4 +32,4 @@ def start():
 
 def boot():
     download_and_install_update_if_available()
-    # start()
+    start()

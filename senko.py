@@ -6,7 +6,7 @@ class Senko:
     raw = "https://raw.githubusercontent.com"
     github = "https://github.com"
 
-    def __init__(self, user, repo, url=None, branch="main", working_dir="", files=["main.py"], headers={}):
+    def __init__(self, user=None, repo=None, url=None, branch="main", working_dir="", files=["main.py"], headers={}):
         """Senko OTA agent class.
         Args:
             user (str): GitHub user.

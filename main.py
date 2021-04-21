@@ -53,9 +53,8 @@ def start():
 
 
 def boot():
-    OTA = senko.Senko(
-        user="hrysto97", repo="esp-upython", files=["main.py"]
-    )
+    GITHUB_URL = "https://github.com/hrysto97/esp-upython/"
+    OTA = senko.Senko(url=GITHUB_URL, files=["main.py"])
 
     # Connect to Wi-Fi network.
     connect_wlan(secrets.WIFI_SSID, secrets.WIFI_PASSWORD)

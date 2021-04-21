@@ -60,6 +60,6 @@ def boot():
     # Connect to Wi-Fi network.
     connect_wlan(secrets.WIFI_SSID, secrets.WIFI_PASSWORD)
 
-    if OTA.updaimite():
+    if OTA.update():
         print("Updated to the latest version! Rebooting...")
         machine.reset()

@@ -54,12 +54,12 @@ def start():
 
 
 def boot():
-    GITHUB_URL = "https://github.com/hrysto97/esp-upython/"
+    GITHUB_URL = "https://github.com/hrysto97/esp-upython/blob/main/"
     OTA = senko.Senko(url=GITHUB_URL, files=["main.py"])
 
     # Connect to Wi-Fi network.
     connect_wlan(secrets.WIFI_SSID, secrets.WIFI_PASSWORD)
 
-    if OTA.update():
+    if OTA.updaimite():
         print("Updated to the latest version! Rebooting...")
         machine.reset()

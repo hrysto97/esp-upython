@@ -1,3 +1,5 @@
+import gc
+
 import urequests
 import uhashlib
 
@@ -29,31 +31,40 @@ class Senko:
         x = x_hash.digest()
         y = y_hash.digest()
 
+        print(str(x))
+        print(str(y))
+        print()
         if str(x) == str(y):
             return True
         else:
             return False
 
     def _get_file(self, url):
+        print(url)
+        print(gc.mem_free())
         payload = urequests.get(url, headers=self.headers)
+        print(gc.mem_free())
         code = payload.status_code
 
         if code == 200:
             return payload.text
         else:
+            print(code)
             return None
 
     def _check_all(self):
         changes = []
 
         for file in self.files:
-            latest_version = self._get_file(self.url + "/" + file)
+            latest_version = self._get_file(self.url + file)
+            print(latest_version)
             if latest_version is None:
                 continue
 
             try:
                 with open(file, "r") as local_file:
                     local_version = local_file.read()
+                    print(local_version)
             except:
                 local_version = ""
 
@@ -77,10 +88,12 @@ class Senko:
         Returns:
             True - if changes were made, False - if not.
         """
+        print(gc.mem_free())
         changes = self._check_all()
-
+        print(gc.mem_free())
         for file in changes:
             with open(file, "w") as local_file:
+                print(gc.mem_free())
                 local_file.write(self._get_file(self.url + "/" + file))
 
         if changes:

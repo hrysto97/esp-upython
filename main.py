@@ -1,8 +1,8 @@
 import time
 import machine, onewire, ds18x20
-from app import secrets
+import secrets
 
-from app import senko
+import senko
 import network
 
 
